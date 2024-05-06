@@ -25,8 +25,6 @@ public class FileServlet extends HttpServlet {
             resp.getOutputStream().write(userById.getProfileImage());
         } else if (part != null) {
             byte[] profileImage = (byte[]) req.getSession().getAttribute("profileImage");
-            System.out.println(profileImage == null);
-            System.out.println(profileImage.length);
             resp.getOutputStream().write(profileImage);
         }
     }

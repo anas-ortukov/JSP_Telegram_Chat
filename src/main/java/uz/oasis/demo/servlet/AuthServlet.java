@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.mindrot.jbcrypt.BCrypt;
 import uz.oasis.demo.entity.User;
 import uz.oasis.demo.repo.UserRepo;
 
@@ -22,7 +23,7 @@ public class AuthServlet extends HttpServlet {
         Optional<User> userOptional = userRepo.findByEmail(email);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            if (user.getPassword().equals(password)) {
+            if (BCrypt.checkpw(password, user.getPassword())) {
                 req.getSession().setAttribute("currentUser", user);
                 resp.sendRedirect("/");
                 return;

@@ -1,13 +1,12 @@
-<%@ page import="java.util.List" %>
 <%@ page import="uz.oasis.demo.repo.UserRepo" %>
 <%@ page import="uz.oasis.demo.entity.User" %>
-<%@ page import="java.util.UUID" %>
-<%@ page import="java.util.Objects" %>
 <%@ page import="uz.oasis.demo.repo.MessageRepo" %>
 <%@ page import="uz.oasis.demo.entity.Message" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.time.LocalDate" %>
+<%@ page import="java.util.*" %>
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,6 +23,8 @@
 <%
     UserRepo userRepo = new UserRepo();
     List<User> users = userRepo.findAll();
+    Comparator<User> comparator = Comparator.comparing(User::getName);
+    users.sort(comparator);
     User sender = (User) request.getSession().getAttribute("currentUser");
     MessageRepo messageRepo = new MessageRepo();
     UUID receiver = null;
@@ -78,7 +79,7 @@
             </div>
             <div class="col-8 offset-1 my-4">
                 <div class="container">
-                    <div id="messageContainer" class="overflow-auto" style="max-height: 650px;">
+                    <div id="messageContainer" class="overflow-auto p-4 shadow-sm rounded" style="max-height: 650px;">
                         <% List<Message> messages = messageRepo.getConversation(sender, receiver);
                             LocalDate currentDate = null;
                             for (Message message : messages) {
